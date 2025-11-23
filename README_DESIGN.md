@@ -177,3 +177,4 @@ Design inspiré de [portal.intuition.systems](https://portal.intuition.systems/)
 
 💡 Pour toute question sur le design, consultez `NOUVEAU_DESIGN.md` à la racine du projet.
 
+

@@ -156,6 +156,30 @@
   font-variant-numeric: tabular-nums;
 }
 
+.growth-metric {
+  border-right: 1px solid var(--border-color);
+  padding-right: 1rem;
+  margin-right: 0.5rem;
+}
+
+.growth-value {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.growth-value.up {
+  color: var(--accent-green);
+}
+
+.growth-value.down {
+  color: var(--accent-red);
+}
+
+.growth-value.stable {
+  color: var(--text-muted);
+}
+
 .atom-card-link {
   background: transparent;
   color: var(--accent-blue);

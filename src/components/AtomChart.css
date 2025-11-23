@@ -1,0 +1,78 @@
+.atom-chart {
+  width: 100%;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.atom-chart:hover {
+  border-color: var(--border-hover);
+}
+
+.chart-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.custom-tooltip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tooltip-signal,
+.tooltip-price {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tooltip-signal span {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.tooltip-price span {
+  color: var(--accent-purple);
+  font-weight: 600;
+}
+
+/* Recharts Legend Style Override */
+.recharts-legend-wrapper {
+  padding-top: 1rem !important;
+}
+
+.recharts-legend-item-text {
+  color: var(--text-secondary) !important;
+  font-size: 0.85rem !important;
+}
+
+

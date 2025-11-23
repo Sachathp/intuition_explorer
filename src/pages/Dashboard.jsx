@@ -10,17 +10,24 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [syncing, setSyncing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
+  const [activeTab, setActiveTab] = useState('top'); // 'top' ou 'trending'
+  const [trendingPeriod, setTrendingPeriod] = useState('24h'); // '24h' ou '7d'
 
   useEffect(() => {
     loadAtoms();
-  }, []);
+  }, [activeTab, trendingPeriod]);
 
   const loadAtoms = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await atomsService.getAtoms(10);
-      setAtoms(data.atoms);
+      if (activeTab === 'trending') {
+        const data = await atomsService.getTrending(trendingPeriod, 10);
+        setAtoms(data.trending);
+      } else {
+        const data = await atomsService.getAtoms(10);
+        setAtoms(data.atoms);
+      }
     } catch (err) {
       setError('Erreur lors du chargement des atoms');
       console.error(err);
@@ -32,9 +39,25 @@ const Dashboard = () => {
   const handleSync = async () => {
     try {
       setSyncing(true);
-      const result = await atomsService.syncAtoms();
-      alert(`✅ ${result.synced_count} atoms synchronisés avec succès !`);
-      await loadAtoms();
+      
+      // Synchronisation incrémentale (nouveaux atoms uniquement)
+      const result = await atomsService.syncAtoms('new', 500);
+      
+      if (result.success) {
+        const { stats, atoms } = result;
+        const message = stats.added > 0
+          ? `✅ ${stats.added} nouveaux atoms ajoutés !\n\n` +
+            `📊 Total: ${atoms.after.toLocaleString()} / ${atoms.total_on_network.toLocaleString()} atoms\n` +
+            `📈 Couverture: ${atoms.coverage_percent}%`
+          : `✅ Aucun nouvel atom.\n\n` +
+            `📊 Vous avez déjà ${atoms.after.toLocaleString()} atoms\n` +
+            `📈 Couverture: ${atoms.coverage_percent}%`;
+        
+        alert(message);
+        await loadAtoms(); // Recharger la liste
+      } else {
+        alert(`❌ Erreur: ${result.error}`);
+      }
     } catch (err) {
       alert('❌ Erreur lors de la synchronisation');
       console.error(err);
@@ -109,13 +132,57 @@ const Dashboard = () => {
           </div>
         ) : (
           <>
+            {!searchMode && (
+              <div className="tabs-container">
+                <div className="tabs">
+                  <button
+                    className={`tab ${activeTab === 'top' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('top')}
+                  >
+                    🏆 Top Atoms
+                  </button>
+                  <button
+                    className={`tab ${activeTab === 'trending' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('trending')}
+                  >
+                    📈 Trending
+                  </button>
+                </div>
+                
+                {activeTab === 'trending' && (
+                  <div className="period-selector">
+                    <button
+                      className={`period-button ${trendingPeriod === '24h' ? 'active' : ''}`}
+                      onClick={() => setTrendingPeriod('24h')}
+                    >
+                      24h
+                    </button>
+                    <button
+                      className={`period-button ${trendingPeriod === '7d' ? 'active' : ''}`}
+                      onClick={() => setTrendingPeriod('7d')}
+                    >
+                      7j
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+            
             <div className="dashboard-stats">
               <h2 className="section-title">
-                {searchMode ? `🔍 Résultats de recherche (${atoms.length})` : '🏆 Top 10 des Atoms'}
+                {searchMode 
+                  ? `🔍 Résultats de recherche (${atoms.length})` 
+                  : activeTab === 'trending' 
+                    ? `📈 Atoms en Tendance (${atoms.length})`
+                    : `🏆 Top ${atoms.length} des Atoms`
+                }
               </h2>
               {!searchMode && (
                 <p className="section-description">
-                  Classés par valeur de signal (confiance économique) décroissante
+                  {activeTab === 'trending'
+                    ? `Plus forte croissance sur ${trendingPeriod === '24h' ? '24 heures' : '7 jours'}`
+                    : 'Classés par valeur de signal (confiance économique) décroissante'
+                  }
                 </p>
               )}
             </div>
@@ -131,7 +198,11 @@ const Dashboard = () => {
             ) : (
               <div className="atoms-grid">
                 {atoms.map((atom) => (
-                  <AtomCard key={atom.id} atom={atom} />
+                  <AtomCard 
+                    key={atom.id} 
+                    atom={atom} 
+                    showGrowth={activeTab === 'trending'}
+                  />
                 ))}
               </div>
             )}

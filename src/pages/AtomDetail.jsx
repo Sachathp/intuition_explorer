@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { atomsService } from '../services/api';
+import AtomChart from '../components/AtomChart';
 import './AtomDetail.css';
 
 const AtomDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [atom, setAtom] = useState(null);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     loadAtom();
+    loadHistory();
   }, [id]);
 
   const loadAtom = async () => {
@@ -25,6 +29,19 @@ const AtomDetail = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadHistory = async () => {
+    try {
+      setLoadingHistory(true);
+      const data = await atomsService.getAtomHistory(id, 7);
+      setHistory(data.data);
+    } catch (err) {
+      console.error('Erreur lors du chargement de l\'historique:', err);
+      setHistory([]);
+    } finally {
+      setLoadingHistory(false);
     }
   };
 
@@ -126,6 +143,14 @@ const AtomDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Graphique de l'historique */}
+        {!loadingHistory && history.length > 0 && (
+          <AtomChart 
+            data={history} 
+            title="📈 Évolution du Signal et du Prix (7 derniers jours)"
+          />
+        )}
 
         {atom.triples && atom.triples.length > 0 && (
           <div className="detail-card triples-section">

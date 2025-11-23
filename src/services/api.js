@@ -34,6 +34,28 @@ export const atomsService = {
     }
   },
 
+  // Récupère l'historique d'un atom pour les graphiques
+  getAtomHistory: async (id, days = 7) => {
+    try {
+      const response = await api.get(`/atoms/${id}/history?days=${days}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Erreur lors de la récupération de l'historique de l'atom ${id}:`, error);
+      throw error;
+    }
+  },
+
+  // Récupère les atoms trending (plus forte croissance)
+  getTrending: async (period = '24h', limit = 10) => {
+    try {
+      const response = await api.get(`/trending?period=${period}&limit=${limit}`);
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des atoms trending:', error);
+      throw error;
+    }
+  },
+
   // Recherche des atoms par requête
   searchAtoms: async (query, limit = 20) => {
     try {
@@ -46,12 +68,25 @@ export const atomsService = {
   },
 
   // Synchronise les atoms depuis l'API Intuition
-  syncAtoms: async () => {
+  // mode: 'new' (nouveaux atoms), 'update' (mise à jour), 'full' (tout)
+  // limit: nombre max d'atoms à synchroniser
+  syncAtoms: async (mode = 'new', limit = 500) => {
     try {
-      const response = await api.post('/sync');
+      const response = await api.post('/sync', { mode, limit });
       return response.data;
     } catch (error) {
       console.error('Erreur lors de la synchronisation:', error);
+      throw error;
+    }
+  },
+
+  // Récupère le statut de la synchronisation
+  getSyncStatus: async () => {
+    try {
+      const response = await api.get('/sync/status');
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération du statut:', error);
       throw error;
     }
   },

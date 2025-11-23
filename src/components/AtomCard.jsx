@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './AtomCard.css';
 
-const AtomCard = ({ atom, showFullDescription = false }) => {
+const AtomCard = ({ atom, showFullDescription = false, showGrowth = false }) => {
   // Calculer l'indicateur de confiance basé sur le signal
   const getConfidenceIndicator = (signalValue) => {
     if (signalValue > 1000) return { emoji: '🟢', label: 'Haute', cssClass: 'high' };
@@ -18,6 +18,13 @@ const AtomCard = ({ atom, showFullDescription = false }) => {
     : atom.description?.length > 150 
       ? `${atom.description.substring(0, 150)}...` 
       : atom.description;
+  
+  // Formater le pourcentage de croissance
+  const formatGrowth = (growth) => {
+    if (!growth) return '0.00';
+    const num = parseFloat(growth);
+    return num >= 0 ? `+${num.toFixed(2)}` : num.toFixed(2);
+  };
 
   return (
     <div className="atom-card">
@@ -39,6 +46,16 @@ const AtomCard = ({ atom, showFullDescription = false }) => {
       </div>
 
       <div className="atom-card-footer">
+        {showGrowth && atom.growth_percentage !== undefined ? (
+          <div className="atom-metric growth-metric">
+            <span className="metric-label">Croissance</span>
+            <span className={`metric-value growth-value ${atom.growth_direction}`}>
+              {atom.growth_direction === 'up' ? '↗' : atom.growth_direction === 'down' ? '↘' : '→'} 
+              {formatGrowth(atom.growth_percentage)}%
+            </span>
+          </div>
+        ) : null}
+        
         <div className="atom-metric">
           <span className="metric-label">Signal</span>
           <span className="metric-value">
