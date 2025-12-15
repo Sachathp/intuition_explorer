@@ -181,7 +181,7 @@ const Dashboard = () => {
                 <p className="section-description">
                   {activeTab === 'trending'
                     ? `Plus forte croissance sur ${trendingPeriod === '24h' ? '24 heures' : '7 jours'}`
-                    : 'Classés par valeur de signal (confiance économique) décroissante'
+                    : 'Classés par market cap (capitalisation de marché) décroissante'
                   }
                 </p>
               )}

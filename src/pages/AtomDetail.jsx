@@ -45,9 +45,9 @@ const AtomDetail = () => {
     }
   };
 
-  const getConfidenceIndicator = (signalValue) => {
-    if (signalValue > 1000) return { emoji: '🟢', label: 'Haute Confiance', cssClass: 'high' };
-    if (signalValue > 100) return { emoji: '🟡', label: 'Confiance Moyenne', cssClass: 'medium' };
+  const getConfidenceIndicator = (marketCap) => {
+    if (marketCap > 1000) return { emoji: '🟢', label: 'Haute Confiance', cssClass: 'high' };
+    if (marketCap > 100) return { emoji: '🟡', label: 'Confiance Moyenne', cssClass: 'medium' };
     return { emoji: '🔴', label: 'Faible Confiance', cssClass: 'low' };
   };
 
@@ -75,7 +75,7 @@ const AtomDetail = () => {
     );
   }
 
-  const confidence = getConfidenceIndicator(atom.current_signal_value);
+  const confidence = getConfidenceIndicator(atom.market_cap || 0);
 
   return (
     <div className="atom-detail-page">
@@ -109,19 +109,38 @@ const AtomDetail = () => {
             <code className="did-code">{atom.did}</code>
           </div>
 
+          <div className="detail-grid-2">
+            <div className="detail-section">
+              <h3 className="subsection-title">Type</h3>
+              <div className="info-value badge">{atom.type ? atom.type.split('/').pop() : 'N/A'}</div>
+            </div>
+            <div className="detail-section">
+              <h3 className="subsection-title">Block Création</h3>
+              <div className="info-value">{atom.block_number ? `#${atom.block_number}` : 'N/A'}</div>
+            </div>
+            <div className="detail-section">
+              <h3 className="subsection-title">Créateur</h3>
+              <div className="info-value monospace">{atom.creator_id ? `${atom.creator_id.substring(0, 10)}...` : 'N/A'}</div>
+            </div>
+             <div className="detail-section">
+              <h3 className="subsection-title">Wallet</h3>
+              <div className="info-value monospace">{atom.wallet_id ? `${atom.wallet_id.substring(0, 10)}...` : 'N/A'}</div>
+            </div>
+          </div>
+
           <div className="metrics-grid">
             <div className="metric-card">
               <div className="metric-icon">📊</div>
               <div className="metric-content">
-                <div className="metric-label">Signal Value</div>
+                <div className="metric-label">Market Cap</div>
                 <div className="metric-value">
-                  {parseFloat(atom.current_signal_value).toLocaleString('fr-FR', {
+                  {parseFloat(atom.market_cap || 0).toLocaleString('fr-FR', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
-                  })}
+                  })} TRUST
                 </div>
                 <div className="metric-description">
-                  Confiance économique via dépôts $trust
+                  Capitalisation du marché
                 </div>
               </div>
             </div>
@@ -134,10 +153,39 @@ const AtomDetail = () => {
                   {parseFloat(atom.share_price).toLocaleString('fr-FR', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
+                  })} TRUST
+                </div>
+                <div className="metric-description">
+                  Prix par part
+                </div>
+              </div>
+            </div>
+
+            <div className="metric-card">
+              <div className="metric-icon">📈</div>
+              <div className="metric-content">
+                <div className="metric-label">Total Shares</div>
+                <div className="metric-value">
+                  {parseFloat(atom.total_shares || 0).toLocaleString('fr-FR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
                   })}
                 </div>
                 <div className="metric-description">
-                  Prix des parts de cet Atom
+                  Nombre total de parts
+                </div>
+              </div>
+            </div>
+
+            <div className="metric-card">
+              <div className="metric-icon">👥</div>
+              <div className="metric-content">
+                <div className="metric-label">Positions</div>
+                <div className="metric-value">
+                  {atom.positions_count || 0}
+                </div>
+                <div className="metric-description">
+                  Nombre de positions ouvertes
                 </div>
               </div>
             </div>

@@ -1,6 +1,7 @@
 .dashboard {
   min-height: 100vh;
   background: var(--bg-primary);
+  background-image: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.05), transparent 40%);
   padding: 2rem;
   padding-bottom: 4rem;
 }
@@ -8,36 +9,49 @@
 .dashboard-header {
   max-width: 1400px;
   margin: 0 auto 3rem;
+  position: relative;
 }
 
 .header-content {
   margin-bottom: 2.5rem;
+  text-align: center;
 }
 
 .dashboard-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 0.75rem;
+  margin: 0 0 1rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  letter-spacing: -0.02em;
+  justify-content: center;
+  gap: 1rem;
+  letter-spacing: -0.03em;
+  background: linear-gradient(to right, #fff, #a0a0b2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .title-icon {
-  font-size: 2.5rem;
+  font-size: 3rem;
+  background: none;
+  -webkit-text-fill-color: initial;
 }
 
 .dashboard-subtitle {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--text-secondary);
-  margin: 0;
+  margin: 0 auto;
   font-weight: 400;
+  max-width: 600px;
+  line-height: 1.6;
 }
 
 .header-actions {
   margin-top: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
 .sync-button {
@@ -45,17 +59,21 @@
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 0.75rem 1.5rem;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .sync-button:hover:not(:disabled) {
   background: var(--bg-card-hover);
-  border-color: var(--border-hover);
+  border-color: var(--accent-blue);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
 .sync-button:disabled {
@@ -75,12 +93,17 @@
   margin-bottom: 2rem;
   gap: 1rem;
   flex-wrap: wrap;
+  background: rgba(26, 26, 36, 0.5);
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
 }
 
 .tabs {
   display: flex;
   gap: 0.5rem;
-  background: var(--bg-card);
+  background: var(--bg-primary);
   padding: 0.35rem;
   border-radius: 12px;
   border: 1px solid var(--border-color);
@@ -100,18 +123,18 @@
 
 .tab:hover {
   color: var(--text-primary);
-  background: var(--bg-secondary);
 }
 
 .tab.active {
-  background: var(--accent-blue);
-  color: white;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .period-selector {
   display: flex;
   gap: 0.5rem;
-  background: var(--bg-card);
+  background: var(--bg-primary);
   padding: 0.35rem;
   border-radius: 10px;
   border: 1px solid var(--border-color);
@@ -132,7 +155,6 @@
 
 .period-button:hover {
   color: var(--text-primary);
-  background: var(--bg-secondary);
 }
 
 .period-button.active {
@@ -146,24 +168,24 @@
 }
 
 .section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 0.5rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .section-description {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--text-secondary);
   margin: 0;
 }
 
 .atoms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 .loading-container,
@@ -175,16 +197,20 @@
   justify-content: center;
   min-height: 400px;
   color: var(--text-secondary);
+  background: var(--bg-card);
+  border-radius: 24px;
+  border: 1px dashed var(--border-color);
+  margin-top: 2rem;
 }
 
 .loader {
-  border: 3px solid var(--bg-card);
+  border: 3px solid var(--bg-primary);
   border-top: 3px solid var(--accent-blue);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: 1rem;
+  width: 48px;
+  height: 48px;
+  animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  margin-bottom: 1.5rem;
 }
 
 @keyframes spin {
@@ -194,7 +220,7 @@
 
 .loading-container p,
 .empty-message {
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin: 0;
   color: var(--text-secondary);
 }
@@ -202,16 +228,16 @@
 .error-message {
   font-size: 1.1rem;
   color: var(--accent-red);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .retry-button {
-  background: var(--bg-card);
+  background: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 10px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -229,11 +255,26 @@
 
   .dashboard-title {
     font-size: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .title-icon {
+    margin-bottom: 0.5rem;
   }
 
   .atoms-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+  
+  .tabs-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .tabs, .period-selector {
+    width: 100%;
+    justify-content: center;
+  }
 }
-
