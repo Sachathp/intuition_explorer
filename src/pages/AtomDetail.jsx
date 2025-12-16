@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { atomsService } from '../services/api';
 import AtomChart from '../components/AtomChart';
 import './AtomDetail.css';
@@ -7,16 +7,26 @@ import './AtomDetail.css';
 const AtomDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [atom, setAtom] = useState(null);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [error, setError] = useState(null);
+  const [copiedText, setCopiedText] = useState(null);
+  
+  // Récupérer la période depuis le state de navigation (trendingPeriod du Dashboard)
+  // ou utiliser 7d par défaut
+  const initialPeriod = location.state?.from?.trendingPeriod || '7d';
+  const [chartPeriod, setChartPeriod] = useState(initialPeriod);
 
   useEffect(() => {
     loadAtom();
-    loadHistory();
   }, [id]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [id, chartPeriod]);
 
   const loadAtom = async () => {
     try {
@@ -35,7 +45,7 @@ const AtomDetail = () => {
   const loadHistory = async () => {
     try {
       setLoadingHistory(true);
-      const data = await atomsService.getAtomHistory(id, 7);
+      const data = await atomsService.getAtomHistory(id, chartPeriod);
       setHistory(data.data);
     } catch (err) {
       console.error('Erreur lors du chargement de l\'historique:', err);
@@ -45,10 +55,51 @@ const AtomDetail = () => {
     }
   };
 
+  // Obtenir le libellé de la période pour l'affichage
+  const getPeriodLabel = (period) => {
+    const labels = {
+      '1h': '1 heure',
+      '4h': '4 heures',
+      '24h': '24 heures',
+      '1d': '24 heures',
+      '7d': '7 jours',
+      '1w': '7 jours'
+    };
+    return labels[period] || period;
+  };
+
   const getConfidenceIndicator = (marketCap) => {
     if (marketCap > 1000) return { emoji: '🟢', label: 'Haute Confiance', cssClass: 'high' };
     if (marketCap > 100) return { emoji: '🟡', label: 'Confiance Moyenne', cssClass: 'medium' };
     return { emoji: '🔴', label: 'Faible Confiance', cssClass: 'low' };
+  };
+
+  // Copier dans le presse-papier
+  const copyToClipboard = async (text, label) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(label);
+      setTimeout(() => setCopiedText(null), 2000);
+    } catch (err) {
+      console.error('Erreur lors de la copie:', err);
+    }
+  };
+
+  // Retour à la page Dashboard avec l'état conservé
+  const handleBack = () => {
+    const fromState = location.state?.from;
+    
+    if (fromState) {
+      // Retourner au Dashboard avec l'état restauré
+      navigate('/', { 
+        state: { 
+          restore: fromState 
+        } 
+      });
+    } else {
+      // Fallback : retour simple
+      navigate('/');
+    }
   };
 
   if (loading) {
@@ -67,8 +118,8 @@ const AtomDetail = () => {
       <div className="atom-detail-page">
         <div className="error-container">
           <p className="error-message">⚠️ {error || 'Atom non trouvé'}</p>
-          <button onClick={() => navigate('/')} className="back-button">
-            ← Retour au dashboard
+          <button onClick={handleBack} className="back-button">
+            ← Retour
           </button>
         </div>
       </div>
@@ -80,7 +131,7 @@ const AtomDetail = () => {
   return (
     <div className="atom-detail-page">
       <div className="detail-header">
-        <button onClick={() => navigate('/')} className="back-button">
+        <button onClick={handleBack} className="back-button">
           ← Retour
         </button>
         <h1 className="page-title">Détails de l'Atom</h1>
@@ -97,16 +148,19 @@ const AtomDetail = () => {
             </div>
           </div>
 
-          <div className="detail-section">
-            <h2 className="section-title">Description</h2>
-            <p className="atom-description">
-              {atom.description || 'Aucune description disponible'}
-            </p>
-          </div>
-
-          <div className="detail-section">
-            <h2 className="section-title">Identifiant (DID)</h2>
-            <code className="did-code">{atom.did}</code>
+          <div className="detail-section atom-name-section">
+            <h2 className="atom-name">{atom.description || 'Sans nom'}</h2>
+            <div className="did-container">
+              <span className="did-label">DID:</span>
+              <code 
+                className="did-code clickable" 
+                onClick={() => copyToClipboard(atom.did, 'DID')}
+                title="Cliquer pour copier"
+              >
+                {atom.did}
+                {copiedText === 'DID' && <span className="copied-badge">✓ Copié</span>}
+              </code>
+            </div>
           </div>
 
           <div className="detail-grid-2">
@@ -120,11 +174,25 @@ const AtomDetail = () => {
             </div>
             <div className="detail-section">
               <h3 className="subsection-title">Créateur</h3>
-              <div className="info-value monospace">{atom.creator_id ? `${atom.creator_id.substring(0, 10)}...` : 'N/A'}</div>
+              <div 
+                className="info-value monospace clickable" 
+                onClick={() => atom.creator_id && copyToClipboard(atom.creator_id, 'creator')}
+                title={atom.creator_id ? "Cliquer pour copier" : ""}
+              >
+                {atom.creator_id ? `${atom.creator_id.substring(0, 10)}...` : 'N/A'}
+                {copiedText === 'creator' && <span className="copied-badge-inline">✓</span>}
+              </div>
             </div>
              <div className="detail-section">
               <h3 className="subsection-title">Wallet</h3>
-              <div className="info-value monospace">{atom.wallet_id ? `${atom.wallet_id.substring(0, 10)}...` : 'N/A'}</div>
+              <div 
+                className="info-value monospace clickable" 
+                onClick={() => atom.wallet_id && copyToClipboard(atom.wallet_id, 'wallet')}
+                title={atom.wallet_id ? "Cliquer pour copier" : ""}
+              >
+                {atom.wallet_id ? `${atom.wallet_id.substring(0, 10)}...` : 'N/A'}
+                {copiedText === 'wallet' && <span className="copied-badge-inline">✓</span>}
+              </div>
             </div>
           </div>
 
@@ -180,12 +248,12 @@ const AtomDetail = () => {
             <div className="metric-card">
               <div className="metric-icon">👥</div>
               <div className="metric-content">
-                <div className="metric-label">Positions</div>
+                <div className="metric-label">Holders</div>
                 <div className="metric-value">
                   {atom.positions_count || 0}
                 </div>
                 <div className="metric-description">
-                  Nombre de positions ouvertes
+                  Nombre de détenteurs
                 </div>
               </div>
             </div>
@@ -193,12 +261,55 @@ const AtomDetail = () => {
         </div>
 
         {/* Graphique de l'historique */}
-        {!loadingHistory && history.length > 0 && (
-          <AtomChart 
-            data={history} 
-            title="📈 Évolution du Signal et du Prix (7 derniers jours)"
-          />
-        )}
+        <div className="detail-card chart-section">
+          <div className="chart-header">
+            <h2 className="chart-title">
+              📈 Évolution du Signal et du Prix ({getPeriodLabel(chartPeriod)})
+            </h2>
+            <div className="period-selector-buttons">
+              <button
+                className={`period-btn ${chartPeriod === '1h' ? 'active' : ''}`}
+                onClick={() => setChartPeriod('1h')}
+              >
+                1h
+              </button>
+              <button
+                className={`period-btn ${chartPeriod === '4h' ? 'active' : ''}`}
+                onClick={() => setChartPeriod('4h')}
+              >
+                4h
+              </button>
+              <button
+                className={`period-btn ${chartPeriod === '24h' ? 'active' : ''}`}
+                onClick={() => setChartPeriod('24h')}
+              >
+                1j
+              </button>
+              <button
+                className={`period-btn ${chartPeriod === '7d' ? 'active' : ''}`}
+                onClick={() => setChartPeriod('7d')}
+              >
+                7j
+              </button>
+            </div>
+          </div>
+          
+          {!loadingHistory && history.length > 0 ? (
+            <AtomChart 
+              data={history} 
+              title=""
+            />
+          ) : loadingHistory ? (
+            <div className="chart-loading">
+              <div className="loader"></div>
+              <p>Chargement des données...</p>
+            </div>
+          ) : (
+            <div className="chart-empty">
+              <p>Aucune donnée historique disponible pour cette période</p>
+            </div>
+          )}
+        </div>
 
         {atom.triples && atom.triples.length > 0 && (
           <div className="detail-card triples-section">

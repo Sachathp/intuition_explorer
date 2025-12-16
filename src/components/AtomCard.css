@@ -1,36 +1,51 @@
+/* AtomCard - Design Professionnel et Sérieux */
 .atom-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 1.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: var(--text-primary);
+  background: linear-gradient(135deg, rgba(15, 15, 30, 0.95) 0%, rgba(26, 26, 46, 0.95) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 1.75rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #f1f5f9;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  min-height: 240px;
+  gap: 1.5rem;
+  min-height: 260px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  backdrop-filter: blur(20px);
 }
 
+/* Effet lumineux au hover */
 .atom-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+  background-size: 200% 100%;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .atom-card:hover {
-  border-color: var(--border-hover);
-  background: var(--bg-card-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, rgba(15, 15, 30, 1) 0%, rgba(30, 30, 50, 1) 100%);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 
+    0 12px 40px rgba(59, 130, 246, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(59, 130, 246, 0.1) inset;
 }
 
 .atom-card:hover::before {
@@ -42,65 +57,79 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
+/* Confidence Badge - Design Pro */
 .atom-card-confidence {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px;
+  gap: 0.5rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: 10px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
 }
 
 .atom-card-confidence.high {
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--accent-green);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%);
+  color: #34d399;
+  border: 1.5px solid rgba(16, 185, 129, 0.3);
 }
 
 .atom-card-confidence.medium {
-  background: rgba(245, 158, 11, 0.1);
-  color: var(--accent-yellow);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%);
+  color: #fbbf24;
+  border: 1.5px solid rgba(245, 158, 11, 0.3);
 }
 
 .atom-card-confidence.low {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--accent-red);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%);
+  color: #f87171;
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
 }
 
+.confidence-emoji {
+  font-size: 1rem;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Type Badge */
 .atom-type-badge {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
   font-size: 0.75rem;
-  font-weight: 500;
-  border: 1px solid var(--border-color);
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: capitalize;
+  letter-spacing: 0.03em;
 }
 
 /* Main Content */
 .atom-card-main {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: flex-start;
 }
 
 .atom-image-container,
 .atom-icon-placeholder {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   flex-shrink: 0;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .atom-image {
@@ -110,9 +139,9 @@
 }
 
 .atom-icon-placeholder {
-  background: var(--bg-secondary);
-  font-size: 1.75rem;
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  font-size: 2rem;
+  border: 1.5px solid rgba(59, 130, 246, 0.2);
 }
 
 .atom-info {
@@ -120,80 +149,153 @@
   min-width: 0;
 }
 
-.atom-did-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.did-prefix {
-  color: var(--text-muted);
-  font-size: 0.75rem;
+/* Titre de l'atom */
+.atom-card-title {
+  font-size: 1.1rem;
   font-weight: 600;
-}
-
-.did-value {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 0.8rem;
-  color: var(--accent-blue);
-  background: rgba(59, 130, 246, 0.1);
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-}
-
-.atom-description {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Metrics Grid */
+.atom-did-container {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.65rem;
+  position: relative;
+}
+
+/* DID cliquable */
+.clickable-did {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  margin: -0.35rem -0.5rem;
+}
+
+.clickable-did:hover {
+  background: rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+.clickable-did:active {
+  transform: translateY(0);
+}
+
+.did-prefix {
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.did-value {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.12);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  font-weight: 600;
+}
+
+.copied-indicator {
+  display: inline-flex;
+  color: #10b981;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+  animation: fadeInBounce 0.3s ease;
+}
+
+@keyframes fadeInBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.atom-description {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 400;
+}
+
+/* Metrics Grid - Design Pro */
 .atom-metrics-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
 }
 
 .atom-metric {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.4rem;
 }
 
 .metric-label {
   font-size: 0.7rem;
-  color: var(--text-muted);
+  color: #64748b;
   text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .metric-value {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f1f5f9;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
+/* Growth Values */
 .growth-value {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.35rem;
+  font-weight: 700;
 }
 
-.growth-value.up { color: var(--accent-green); }
-.growth-value.down { color: var(--accent-red); }
-.growth-value.stable { color: var(--text-muted); }
+.growth-value.up {
+  color: #34d399;
+}
+
+.growth-value.down {
+  color: #f87171;
+}
+
+.growth-value.stable {
+  color: #64748b;
+}
 
 /* Footer */
 .atom-card-footer {
@@ -204,19 +306,52 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   width: 100%;
-  padding: 0.75rem;
-  background: transparent;
-  color: var(--accent-blue);
-  border: 1px solid var(--accent-blue);
-  border-radius: 10px;
-  font-weight: 600;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(29, 78, 216, 0.15) 100%);
+  color: #60a5fa;
+  border: 1.5px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  font-weight: 700;
   font-size: 0.9rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
 .atom-card-link:hover {
-  background: var(--accent-blue);
-  color: white;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(29, 78, 216, 0.25) 100%);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+}
+
+.atom-card-link::after {
+  content: '→';
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.atom-card-link:hover::after {
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .atom-card {
+    padding: 1.5rem;
+  }
+
+  .atom-metrics-grid {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .metric-value {
+    font-size: 1rem;
+  }
 }

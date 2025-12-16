@@ -35,9 +35,30 @@ export const atomsService = {
   },
 
   // Récupère l'historique d'un atom pour les graphiques
-  getAtomHistory: async (id, days = 7) => {
+  // period: '1h', '4h', '24h', '7d'
+  getAtomHistory: async (id, period = '7d') => {
     try {
-      const response = await api.get(`/atoms/${id}/history?days=${days}`);
+      // Convertir la période en paramètre approprié
+      let queryParam;
+      switch (period) {
+        case '1h':
+          queryParam = 'hours=1';
+          break;
+        case '4h':
+          queryParam = 'hours=4';
+          break;
+        case '24h':
+        case '1d':
+          queryParam = 'days=1';
+          break;
+        case '7d':
+        case '1w':
+        default:
+          queryParam = 'days=7';
+          break;
+      }
+      
+      const response = await api.get(`/atoms/${id}/history?${queryParam}`);
       return response.data;
     } catch (error) {
       console.error(`Erreur lors de la récupération de l'historique de l'atom ${id}:`, error);

@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './AtomCard.css';
 
-const AtomCard = ({ atom, showFullDescription = false, showGrowth = false }) => {
+const AtomCard = ({ 
+  atom, 
+  showFullDescription = false, 
+  showGrowth = false,
+  dashboardState = {} 
+}) => {
+  const [copiedText, setCopiedText] = useState(null);
+
   // Calculer l'indicateur de confiance basé sur le market cap
   const getConfidenceIndicator = (marketCap) => {
     if (marketCap > 1000) return { emoji: '🟢', label: 'Haute', cssClass: 'high' };
@@ -33,6 +40,28 @@ const AtomCard = ({ atom, showFullDescription = false, showGrowth = false }) => 
     return parts[parts.length - 1] || type;
   };
 
+  // Copier dans le presse-papier
+  const copyToClipboard = async (text, label) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(label);
+      setTimeout(() => setCopiedText(null), 2000);
+    } catch (err) {
+      console.error('Erreur lors de la copie:', err);
+    }
+  };
+
+  // Extraire le nom de l'atome depuis la description
+  const getAtomName = () => {
+    if (atom.label) return atom.label;
+    if (atom.description) {
+      // Prendre les premiers mots (max 50 caractères)
+      const name = atom.description.substring(0, 50);
+      return name.length < atom.description.length ? `${name}...` : name;
+    }
+    return 'Sans nom';
+  };
+
   return (
     <div className="atom-card">
       <div className="atom-card-header-row">
@@ -59,13 +88,19 @@ const AtomCard = ({ atom, showFullDescription = false, showGrowth = false }) => 
         )}
         
         <div className="atom-info">
-          <div className="atom-did-container">
+          <h3 className="atom-card-title">{getAtomName()}</h3>
+          <div 
+            className="atom-did-container clickable-did" 
+            onClick={(e) => {
+              e.preventDefault();
+              copyToClipboard(atom.did, `did-${atom.id}`);
+            }}
+            title="Cliquer pour copier le DID"
+          >
             <span className="did-prefix">DID:</span>
             <code className="did-value">{atom.did?.substring(0, 12)}...</code>
+            {copiedText === `did-${atom.id}` && <span className="copied-indicator">✓</span>}
           </div>
-          <p className="atom-description">
-            {description || 'Aucune description disponible'}
-          </p>
         </div>
       </div>
 
@@ -99,7 +134,7 @@ const AtomCard = ({ atom, showFullDescription = false, showGrowth = false }) => 
         )}
 
         <div className="atom-metric">
-          <span className="metric-label">Positions</span>
+          <span className="metric-label">Holders</span>
           <span className="metric-value">
             {atom.positions_count || 0}
           </span>
@@ -107,7 +142,11 @@ const AtomCard = ({ atom, showFullDescription = false, showGrowth = false }) => 
       </div>
 
       <div className="atom-card-footer">
-        <Link to={`/atom/${atom.id}`} className="atom-card-link">
+        <Link 
+          to={`/atom/${atom.id}`} 
+          state={{ from: dashboardState }}
+          className="atom-card-link"
+        >
           Voir les détails →
         </Link>
       </div>
