@@ -113,5 +113,19 @@ export const atomsService = {
   },
 };
 
+// Services pour les Positions (wallet)
+export const positionsService = {
+  // Récupère les positions d'une adresse wallet
+  getPositions: async (address, limit = 50, offset = 0) => {
+    try {
+      const response = await api.get(`/positions?address=${address}&limit=${limit}&offset=${offset}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Erreur lors de la récupération des positions pour ${address}:`, error);
+      throw error;
+    }
+  },
+};
+
 export default api;
 

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './SearchBar.css';
 
 const SearchBar = ({ onSearch, onClear }) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e) => {
@@ -20,7 +22,7 @@ const SearchBar = ({ onSearch, onClear }) => {
         <span className="search-icon">🔍</span>
         <input
           type="text"
-          placeholder="Rechercher des atoms par description ou DID..."
+          placeholder={t('search.placeholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="search-input"
@@ -30,14 +32,14 @@ const SearchBar = ({ onSearch, onClear }) => {
             type="button" 
             onClick={handleClear}
             className="clear-button"
-            aria-label="Effacer"
+            aria-label={t('search.clear')}
           >
             ✕
           </button>
         )}
       </div>
       <button type="submit" className="search-button">
-        Rechercher
+        {t('search.button')}
       </button>
     </form>
   );

@@ -1,0 +1,130 @@
+{
+  "app": {
+    "title": "Intuition Explorer",
+    "subtitle": "Découvrez et explorez les Atoms les plus fiables du protocole Intuition"
+  },
+  "nav": {
+    "topAtoms": "Top Atoms",
+    "trending": "Trending",
+    "myPositions": "Mes positions",
+    "syncButton": "Actualiser les données",
+    "syncInProgress": "Actualisation en cours..."
+  },
+  "search": {
+    "placeholder": "Rechercher un atom (DID ou description)...",
+    "button": "Rechercher",
+    "clear": "Effacer",
+    "results": "Résultats de recherche",
+    "noResults": "Aucun résultat trouvé pour votre recherche"
+  },
+  "wallet": {
+    "connect": "Connecter le wallet",
+    "disconnect": "Déconnecter",
+    "wrongNetwork": "⚠️ Mauvais réseau",
+    "expectedNetwork": "Réseau attendu : Intuition ({{chainId}})",
+    "pleaseConnect": "Veuillez connecter votre wallet",
+    "noPositions": "Vous n'avez pas encore de positions. Explorez les atoms et commencez à investir !"
+  },
+  "dashboard": {
+    "loading": "Chargement des atoms...",
+    "error": "Erreur lors du chargement",
+    "retry": "Réessayer",
+    "topSection": "Top {{count}} des Atoms",
+    "trendingSection": "Atoms en Tendance ({{count}})",
+    "positionsSection": "Mes Positions ({{count}})",
+    "sortedBy": "Classés par market cap (capitalisation de marché) décroissante",
+    "strongestGrowth": "Plus forte croissance sur {{period}}",
+    "yourPositions": "Vos positions sur les atoms et triples du protocole Intuition",
+    "noAtoms": "Aucun atom disponible. Cliquez sur \"Synchroniser les données\" pour charger les atoms depuis l'API Intuition."
+  },
+  "filters": {
+    "title": "Filtres",
+    "sortBy": "Trier par",
+    "order": "Ordre",
+    "ascending": "Croissant",
+    "descending": "Décroissant",
+    "marketCap": "Market Cap",
+    "sharePrice": "Prix par share",
+    "holders": "Holders",
+    "date": "Date de création",
+    "minMarketCap": "Market cap minimum",
+    "maxMarketCap": "Market cap maximum",
+    "minSharePrice": "Prix minimum",
+    "maxSharePrice": "Prix maximum",
+    "limit": "Nombre d'atoms",
+    "period": "Période",
+    "apply": "Appliquer",
+    "reset": "Réinitialiser"
+  },
+  "periods": {
+    "1h": "1 heure",
+    "4h": "4 heures",
+    "24h": "24 heures",
+    "7d": "1 semaine"
+  },
+  "atom": {
+    "marketCap": "Market Cap",
+    "sharePrice": "Prix / Share",
+    "holders": "Holders",
+    "growth": "Croissance",
+    "growth24h": "Croissance 24h",
+    "growth7d": "Croissance 7j",
+    "totalShares": "Total Shares",
+    "totalAssets": "Total Assets",
+    "creator": "Créateur",
+    "wallet": "Wallet",
+    "createdAt": "Créé le",
+    "did": "DID",
+    "copied": "Copié",
+    "viewDetails": "Voir les détails",
+    "clickToCopyDID": "Cliquer pour copier le DID",
+    "backToDashboard": "Retour au Dashboard",
+    "relatedTriples": "Triples associés",
+    "noTriples": "Aucun triple trouvé pour cet atom",
+    "chartTitle": "Évolution",
+    "noData": "Aucune donnée disponible pour cette période",
+    "confidence": {
+      "high": "Haute",
+      "medium": "Moyenne",
+      "low": "Faible"
+    },
+    "unknown": "Inconnu",
+    "unnamed": "Sans nom"
+  },
+  "position": {
+    "shares": "Shares",
+    "currentPrice": "Prix actuel",
+    "currentValue": "Valeur actuelle",
+    "estimatedValue": "Valeur estimée *",
+    "entryPrice": "Prix d'achat",
+    "totalCost": "Coût d'achat",
+    "pnl": "Votre P&L",
+    "growth24h": "24h",
+    "growth7d": "7j",
+    "typeAtom": "Atom",
+    "typeTriple": "Triple",
+    "unnamed": "Atom sans nom",
+    "disclaimer": "* Valeur approximative calculée avec prise en compte du slippage de la bonding curve. Pour la valeur exacte, consultez le",
+    "officialPortal": "portail officiel Intuition",
+    "subject": "Sujet",
+    "predicate": "Prédicat",
+    "object": "Objet"
+  },
+  "sync": {
+    "success": "Synchronisation terminée !",
+    "updated": "Atoms actualisés",
+    "created": "Nouveaux atoms",
+    "total": "Total en base",
+    "coverage": "Couverture",
+    "dataUpdated": "Les données (market cap, prix, etc.) sont maintenant à jour !",
+    "error": "Erreur lors de la synchronisation"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "close": "Fermer"
+  }
+}

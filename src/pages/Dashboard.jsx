@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { atomsService } from '../services/api';
+import { useAccount } from 'wagmi';
+import { useTranslation } from 'react-i18next';
+import { atomsService, positionsService } from '../services/api';
 import AtomCard from '../components/AtomCard';
 import SearchBar from '../components/SearchBar';
 import FilterPanel from '../components/FilterPanel';
+import ConnectWallet from '../components/ConnectWallet';
+import PositionCard from '../components/PositionCard';
+import LanguageSelector from '../components/LanguageSelector';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const location = useLocation();
+  const { address, isConnected } = useAccount();
+  const { t } = useTranslation();
   
   // Restaurer l'état depuis la navigation si disponible
   const restoreState = location.state?.restore;
   
   const [atoms, setAtoms] = useState([]);
   const [allAtoms, setAllAtoms] = useState([]); // Pour le filtrage côté client
+  const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [syncing, setSyncing] = useState(false);
@@ -31,8 +39,12 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    loadAtoms();
-  }, [activeTab, trendingPeriod, limit]);
+    if (activeTab === 'positions') {
+      loadPositions();
+    } else {
+      loadAtoms();
+    }
+  }, [activeTab, trendingPeriod, limit, address]);
 
   const loadAtoms = async () => {
     try {
@@ -49,6 +61,27 @@ const Dashboard = () => {
       }
     } catch (err) {
       setError('Erreur lors du chargement des atoms');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadPositions = async () => {
+    if (!address) {
+      setError('Veuillez connecter votre wallet');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      // Charger TOUTES les positions (limite élevée car un utilisateur a rarement 1000+ positions)
+      const data = await positionsService.getPositions(address, 1000);
+      setPositions(data.positions || []);
+    } catch (err) {
+      setError('Erreur lors du chargement de vos positions');
       console.error(err);
     } finally {
       setLoading(false);
@@ -203,13 +236,7 @@ const Dashboard = () => {
   };
 
   const getPeriodLabel = (period) => {
-    const labels = {
-      '1h': '1 heure',
-      '4h': '4 heures',
-      '24h': '24 heures',
-      '7d': '1 semaine'
-    };
-    return labels[period] || period;
+    return t(`periods.${period}`, period);
   };
 
   return (
@@ -218,23 +245,25 @@ const Dashboard = () => {
         <div className="header-content">
           <h1 className="dashboard-title">
             <span className="title-icon">🧠</span>
-            Intuition Explorer
+            {t('app.title')}
           </h1>
           <p className="dashboard-subtitle">
-            Découvrez et explorez les Atoms les plus fiables du protocole Intuition
+            {t('app.subtitle')}
           </p>
         </div>
 
         <SearchBar onSearch={handleSearch} onClear={handleClearSearch} />
 
         <div className="header-actions">
+          <LanguageSelector />
+          <ConnectWallet />
           <button 
             onClick={handleSync} 
             disabled={syncing}
             className="sync-button"
-            title="Actualise les données des atoms (market cap, prix, etc.)"
+            title={t('nav.syncButton')}
           >
-            {syncing ? '⏳ Actualisation en cours...' : '🔄 Actualiser les données'}
+            {syncing ? `⏳ ${t('nav.syncInProgress')}` : `🔄 ${t('nav.syncButton')}`}
           </button>
         </div>
       </header>
@@ -243,13 +272,13 @@ const Dashboard = () => {
         {loading ? (
           <div className="loading-container">
             <div className="loader"></div>
-            <p>Chargement des atoms...</p>
+            <p>{t('dashboard.loading')}</p>
           </div>
         ) : error ? (
           <div className="error-container">
             <p className="error-message">⚠️ {error}</p>
             <button onClick={loadAtoms} className="retry-button">
-              Réessayer
+              {t('dashboard.retry')}
             </button>
           </div>
         ) : (
@@ -269,69 +298,117 @@ const Dashboard = () => {
                   >
                     📈 Trending
                   </button>
+                  {isConnected && (
+                    <button
+                      className={`tab ${activeTab === 'positions' ? 'active' : ''}`}
+                      onClick={() => setActiveTab('positions')}
+                    >
+                      👛 Mes positions
+                    </button>
+                  )}
                 </div>
                 
               </div>
             )}
             
-            <div className="dashboard-stats">
-              <div className="stats-header">
-                <div className="stats-header-text">
-                  <h2 className="section-title">
-                    {searchMode 
-                      ? `🔍 Résultats de recherche (${atoms.length})` 
-                      : activeTab === 'trending' 
-                        ? `📈 Atoms en Tendance (${atoms.length})`
-                        : `🏆 Top ${atoms.length} des Atoms`
-                    }
-                  </h2>
-                  {!searchMode && (
-                    <p className="section-description">
-                      {activeTab === 'trending'
-                        ? `Plus forte croissance sur ${getPeriodLabel(trendingPeriod)}`
-                        : 'Classés par market cap (capitalisation de marché) décroissante'
-                      }
+            {activeTab === 'positions' ? (
+              // Affichage des positions
+              <>
+                <div className="dashboard-stats">
+                  <div className="stats-header">
+                    <div className="stats-header-text">
+                      <h2 className="section-title">
+                        👛 {t('dashboard.positionsSection', { count: positions.length })}
+                      </h2>
+                      <p className="section-description">
+                        {t('dashboard.yourPositions')}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {positions.length === 0 ? (
+                  <div className="empty-state">
+                    <p className="empty-message">
+                      {isConnected 
+                        ? 'Vous n\'avez pas encore de positions. Explorez les atoms et commencez à investir !' 
+                        : 'Connectez votre wallet pour voir vos positions'}
                     </p>
+                  </div>
+                ) : (
+                  <div className="atoms-grid">
+                    {positions.map((position) => (
+                      <PositionCard 
+                        key={position.position_id} 
+                        position={position} 
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              // Affichage des atoms (Top / Trending / Recherche)
+              <>
+                <div className="dashboard-stats">
+                  <div className="stats-header">
+                    <div className="stats-header-text">
+                      <h2 className="section-title">
+                        {searchMode 
+                          ? `🔍 ${t('search.results')} (${atoms.length})` 
+                          : activeTab === 'trending' 
+                            ? `📈 ${t('dashboard.trendingSection', { count: atoms.length })}`
+                            : `🏆 ${t('dashboard.topSection', { count: atoms.length })}`
+                        }
+                      </h2>
+                      {!searchMode && (
+                        <p className="section-description">
+                          {activeTab === 'trending'
+                            ? t('dashboard.strongestGrowth', { period: getPeriodLabel(trendingPeriod) })
+                            : t('dashboard.sortedBy')
+                          }
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {!searchMode && (
+                    <FilterPanel 
+                      onFilterChange={handleFilterChange}
+                      onLimitChange={handleLimitChange}
+                      onPeriodChange={setTrendingPeriod}
+                      currentLimit={limit}
+                      currentPeriod={trendingPeriod}
+                      isTrendingMode={activeTab === 'trending'}
+                    />
                   )}
                 </div>
-              </div>
 
-              {!searchMode && (
-                <FilterPanel 
-                  onFilterChange={handleFilterChange}
-                  onLimitChange={handleLimitChange}
-                  onPeriodChange={setTrendingPeriod}
-                  currentLimit={limit}
-                  currentPeriod={trendingPeriod}
-                  isTrendingMode={activeTab === 'trending'}
-                />
-              )}
-            </div>
-
-            {atoms.length === 0 ? (
-              <div className="empty-state">
-                <p className="empty-message">
-                  {searchMode 
-                    ? 'Aucun résultat trouvé pour votre recherche' 
-                    : 'Aucun atom disponible. Cliquez sur "Synchroniser les données" pour charger les atoms depuis l\'API Intuition.'}
-                </p>
-              </div>
-            ) : (
-              <div className="atoms-grid">
-                {atoms.map((atom) => (
-                  <AtomCard 
-                    key={atom.id} 
-                    atom={atom} 
-                    showGrowth={activeTab === 'trending'}
-                    dashboardState={{
-                      activeTab,
-                      trendingPeriod,
-                      limit,
-                      filters
-                    }}
-                  />
-                ))}
-              </div>
+                {atoms.length === 0 ? (
+                  <div className="empty-state">
+                    <p className="empty-message">
+                      {searchMode 
+                        ? t('search.noResults')
+                        : t('dashboard.noAtoms')}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="atoms-grid">
+                    {atoms.map((atom) => (
+                      <AtomCard 
+                        key={atom.id} 
+                        atom={atom} 
+                        showGrowth={activeTab === 'trending'}
+                        dashboardState={{
+                          activeTab,
+                          trendingPeriod,
+                          limit,
+                          filters
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </>
         )}

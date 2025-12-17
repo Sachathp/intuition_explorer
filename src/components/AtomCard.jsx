@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './AtomCard.css';
 
 const AtomCard = ({ 
@@ -8,13 +9,14 @@ const AtomCard = ({
   showGrowth = false,
   dashboardState = {} 
 }) => {
+  const { t } = useTranslation();
   const [copiedText, setCopiedText] = useState(null);
 
   // Calculer l'indicateur de confiance basé sur le market cap
   const getConfidenceIndicator = (marketCap) => {
-    if (marketCap > 1000) return { emoji: '🟢', label: 'Haute', cssClass: 'high' };
-    if (marketCap > 100) return { emoji: '🟡', label: 'Moyenne', cssClass: 'medium' };
-    return { emoji: '🔴', label: 'Faible', cssClass: 'low' };
+    if (marketCap > 1000) return { emoji: '🟢', label: t('atom.confidence.high'), cssClass: 'high' };
+    if (marketCap > 100) return { emoji: '🟡', label: t('atom.confidence.medium'), cssClass: 'medium' };
+    return { emoji: '🔴', label: t('atom.confidence.low'), cssClass: 'low' };
   };
 
   const confidence = getConfidenceIndicator(atom.market_cap || 0);
@@ -35,7 +37,7 @@ const AtomCard = ({
 
   // Formater le type (ex: 'Person' au lieu de 'http://schema.org/Person')
   const formatType = (type) => {
-    if (!type) return 'Inconnu';
+    if (!type) return t('atom.unknown');
     const parts = type.split('/');
     return parts[parts.length - 1] || type;
   };
@@ -59,7 +61,7 @@ const AtomCard = ({
       const name = atom.description.substring(0, 50);
       return name.length < atom.description.length ? `${name}...` : name;
     }
-    return 'Sans nom';
+    return t('atom.unnamed');
   };
 
   return (
@@ -95,9 +97,9 @@ const AtomCard = ({
               e.preventDefault();
               copyToClipboard(atom.did, `did-${atom.id}`);
             }}
-            title="Cliquer pour copier le DID"
+            title={t('atom.clickToCopyDID')}
           >
-            <span className="did-prefix">DID:</span>
+            <span className="did-prefix">{t('atom.did')}:</span>
             <code className="did-value">{atom.did?.substring(0, 12)}...</code>
             {copiedText === `did-${atom.id}` && <span className="copied-indicator">✓</span>}
           </div>
@@ -106,7 +108,7 @@ const AtomCard = ({
 
       <div className="atom-metrics-grid">
         <div className="atom-metric">
-          <span className="metric-label">Market Cap</span>
+          <span className="metric-label">{t('atom.marketCap')}</span>
           <span className="metric-value">
             {parseFloat(atom.market_cap || 0).toLocaleString('fr-FR', {
               maximumFractionDigits: 2
@@ -115,7 +117,7 @@ const AtomCard = ({
         </div>
         
         <div className="atom-metric">
-          <span className="metric-label">Prix / Share</span>
+          <span className="metric-label">{t('atom.sharePrice')}</span>
           <span className="metric-value">
             {parseFloat(atom.share_price).toLocaleString('fr-FR', {
               maximumFractionDigits: 2
@@ -125,7 +127,7 @@ const AtomCard = ({
 
         {showGrowth && atom.growth_percentage !== undefined && (
           <div className="atom-metric">
-            <span className="metric-label">Croissance</span>
+            <span className="metric-label">{t('atom.growth')}</span>
             <span className={`metric-value growth-value ${atom.growth_direction}`}>
               {atom.growth_direction === 'up' ? '↗' : atom.growth_direction === 'down' ? '↘' : '→'} 
               {formatGrowth(atom.growth_percentage)}%
@@ -134,7 +136,7 @@ const AtomCard = ({
         )}
 
         <div className="atom-metric">
-          <span className="metric-label">Holders</span>
+          <span className="metric-label">{t('atom.holders')}</span>
           <span className="metric-value">
             {atom.positions_count || 0}
           </span>
@@ -147,7 +149,7 @@ const AtomCard = ({
           state={{ from: dashboardState }}
           className="atom-card-link"
         >
-          Voir les détails →
+          {t('atom.viewDetails')} →
         </Link>
       </div>
     </div>

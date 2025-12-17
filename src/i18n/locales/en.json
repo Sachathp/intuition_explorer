@@ -1,0 +1,130 @@
+{
+  "app": {
+    "title": "Intuition Explorer",
+    "subtitle": "Discover and explore the most trusted Atoms of the Intuition protocol"
+  },
+  "nav": {
+    "topAtoms": "Top Atoms",
+    "trending": "Trending",
+    "myPositions": "My Positions",
+    "syncButton": "Refresh Data",
+    "syncInProgress": "Refreshing..."
+  },
+  "search": {
+    "placeholder": "Search an atom (DID or description)...",
+    "button": "Search",
+    "clear": "Clear",
+    "results": "Search Results",
+    "noResults": "No results found for your search"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "wrongNetwork": "⚠️ Wrong Network",
+    "expectedNetwork": "Expected network: Intuition ({{chainId}})",
+    "pleaseConnect": "Please connect your wallet",
+    "noPositions": "You don't have any positions yet. Explore atoms and start investing!"
+  },
+  "dashboard": {
+    "loading": "Loading atoms...",
+    "error": "Error loading data",
+    "retry": "Retry",
+    "topSection": "Top {{count}} Atoms",
+    "trendingSection": "Trending Atoms ({{count}})",
+    "positionsSection": "My Positions ({{count}})",
+    "sortedBy": "Sorted by market cap (market capitalization) descending",
+    "strongestGrowth": "Strongest growth over {{period}}",
+    "yourPositions": "Your positions on atoms and triples of the Intuition protocol",
+    "noAtoms": "No atoms available. Click \"Refresh Data\" to load atoms from the Intuition API."
+  },
+  "filters": {
+    "title": "Filters",
+    "sortBy": "Sort by",
+    "order": "Order",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "marketCap": "Market Cap",
+    "sharePrice": "Share Price",
+    "holders": "Holders",
+    "date": "Creation Date",
+    "minMarketCap": "Min market cap",
+    "maxMarketCap": "Max market cap",
+    "minSharePrice": "Min price",
+    "maxSharePrice": "Max price",
+    "limit": "Number of atoms",
+    "period": "Period",
+    "apply": "Apply",
+    "reset": "Reset"
+  },
+  "periods": {
+    "1h": "1 hour",
+    "4h": "4 hours",
+    "24h": "24 hours",
+    "7d": "1 week"
+  },
+  "atom": {
+    "marketCap": "Market Cap",
+    "sharePrice": "Share Price",
+    "holders": "Holders",
+    "growth": "Growth",
+    "growth24h": "24h Growth",
+    "growth7d": "7d Growth",
+    "totalShares": "Total Shares",
+    "totalAssets": "Total Assets",
+    "creator": "Creator",
+    "wallet": "Wallet",
+    "createdAt": "Created on",
+    "did": "DID",
+    "copied": "Copied",
+    "viewDetails": "View Details",
+    "clickToCopyDID": "Click to copy DID",
+    "backToDashboard": "Back to Dashboard",
+    "relatedTriples": "Related Triples",
+    "noTriples": "No triples found for this atom",
+    "chartTitle": "Evolution",
+    "noData": "No data available for this period",
+    "confidence": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "unknown": "Unknown",
+    "unnamed": "Unnamed"
+  },
+  "position": {
+    "shares": "Shares",
+    "currentPrice": "Current Price",
+    "currentValue": "Current Value",
+    "estimatedValue": "Estimated value *",
+    "entryPrice": "Entry Price",
+    "totalCost": "Total Cost",
+    "pnl": "Your P&L",
+    "growth24h": "24h",
+    "growth7d": "7d",
+    "typeAtom": "Atom",
+    "typeTriple": "Triple",
+    "unnamed": "Unnamed atom",
+    "disclaimer": "* Estimated value calculated with bonding curve slippage taken into account. For the exact value, check the",
+    "officialPortal": "official Intuition portal",
+    "subject": "Subject",
+    "predicate": "Predicate",
+    "object": "Object"
+  },
+  "sync": {
+    "success": "Synchronization complete!",
+    "updated": "Atoms updated",
+    "created": "New atoms",
+    "total": "Total in database",
+    "coverage": "Coverage",
+    "dataUpdated": "Data (market cap, price, etc.) is now up to date!",
+    "error": "Error during synchronization"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close"
+  }
+}
