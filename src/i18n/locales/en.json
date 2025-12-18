@@ -7,6 +7,7 @@
     "topAtoms": "Top Atoms",
     "trending": "Trending",
     "myPositions": "My Positions",
+    "explorer": "Wallet Explorer",
     "syncButton": "Refresh Data",
     "syncInProgress": "Refreshing..."
   },
@@ -36,6 +37,18 @@
     "strongestGrowth": "Strongest growth over {{period}}",
     "yourPositions": "Your positions on atoms and triples of the Intuition protocol",
     "noAtoms": "No atoms available. Click \"Refresh Data\" to load atoms from the Intuition API."
+  },
+  "explorer": {
+    "title": "Explore a Wallet",
+    "description": "Enter an Ethereum address to view its positions",
+    "placeholder": "0x...",
+    "button": "Explore",
+    "loading": "Loading positions...",
+    "errorInvalidAddress": "Invalid Ethereum address (format: 0x...)",
+    "errorEmptyAddress": "Please enter an address",
+    "errorLoading": "Error loading positions",
+    "noPositions": "This wallet has no positions",
+    "positionsCount": "Positions ({{count}})"
   },
   "filters": {
     "title": "Filters",
@@ -98,7 +111,7 @@
     "estimatedValue": "Estimated value *",
     "entryPrice": "Entry Price",
     "totalCost": "Total Cost",
-    "pnl": "Your P&L",
+    "pnl": "P&L",
     "growth24h": "24h",
     "growth7d": "7d",
     "typeAtom": "Atom",

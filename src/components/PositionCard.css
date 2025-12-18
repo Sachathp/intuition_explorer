@@ -252,3 +252,60 @@
     font-size: 0.7rem;
   }
 }
+
+@media (max-width: 480px) {
+  .position-card {
+    padding: 0.85rem;
+  }
+  
+  .position-header {
+    gap: 0.75rem;
+  }
+  
+  .position-image,
+  .position-icon-placeholder {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .position-title {
+    font-size: 0.95rem;
+  }
+  
+  .position-type-badge {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .position-metrics {
+    gap: 0.75rem;
+  }
+  
+  .position-metric-label {
+    font-size: 0.65rem;
+  }
+  
+  .position-metric-value {
+    font-size: 0.9rem;
+  }
+  
+  .performance-badges {
+    gap: 0.5rem;
+  }
+  
+  .performance-badge {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.75rem;
+  }
+  
+  .position-disclaimer {
+    font-size: 0.65rem;
+    padding: 0.65rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .position-card {
+    padding: 0.75rem;
+  }
+}

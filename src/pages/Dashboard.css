@@ -310,6 +310,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   text-align: center;
+  margin-top: 1rem;
 }
 
 .retry-button {
@@ -351,15 +352,45 @@
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+  .dashboard-main {
+    max-width: 100%;
+  }
+  
+  .atoms-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  }
+}
+
 @media (max-width: 1024px) {
   .atoms-grid {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: 768px) {
   .dashboard {
-    padding: 1.5rem 1rem;
+    padding: 1rem 0.75rem;
+  }
+
+  .dashboard-header {
+    margin-bottom: 2rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .sync-button {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
   }
 
   .atoms-grid {
@@ -368,24 +399,86 @@
   }
 
   .tabs-container {
-    flex-direction: column;
-    align-items: stretch;
+    padding: 0.75rem;
   }
 
   .tabs {
-    justify-content: stretch;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE et Edge */
+    flex-wrap: nowrap;
+  }
+  
+  /* Masquer la scrollbar pour Chrome, Safari et Opera */
+  .tabs::-webkit-scrollbar {
+    display: none;
   }
 
   .tab {
-    flex: 1;
-    text-align: center;
+    flex: 0 0 auto;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+  }
+  
+  .dashboard-stats {
+    margin-bottom: 1.5rem;
+  }
+  
+  .stats-header {
+    padding: 1.25rem;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+  }
+  
+  .section-description {
+    font-size: 0.85rem;
+  }
+  
+  /* Explorer sur mobile */
+  .explorer-container {
+    max-width: 100%;
+  }
+  
+  .explorer-form {
+    flex-direction: column;
+  }
+  
+  .explorer-button {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .explorer-positions-title {
+    font-size: 1.2rem;
+  }
+  
+  .explorer-address {
+    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
+  .dashboard {
+    padding: 0.75rem 0.5rem;
+  }
+  
   .dashboard-title {
+    font-size: 1.75rem;
     flex-direction: column;
     gap: 0.5rem;
+  }
+  
+  .title-icon {
+    font-size: 2rem;
+  }
+  
+  .dashboard-subtitle {
+    font-size: 0.9rem;
   }
   
   .header-actions {
@@ -395,5 +488,112 @@
   .sync-button {
     width: 100%;
     justify-content: center;
+    font-size: 0.85rem;
+    padding: 0.7rem 1.25rem;
+  }
+  
+  .tabs-container {
+    padding: 0.5rem;
+  }
+  
+  .tabs {
+    padding: 0.3rem;
+    gap: 0.5rem;
+  }
+  
+  .tab {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .stats-header {
+    padding: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.1rem;
+  }
+  
+  .section-description {
+    font-size: 0.8rem;
+  }
+  
+  .atoms-grid {
+    gap: 1rem;
+  }
+  
+  .loading-container,
+  .error-container,
+  .empty-state {
+    padding: 3rem 1.5rem;
+  }
+  
+  .error-message,
+  .empty-message {
+    font-size: 0.95rem;
+  }
+  
+  /* Explorer sur petits mobiles */
+  .explorer-form {
+    gap: 0.75rem;
+  }
+  
+  .explorer-button {
+    font-size: 0.85rem;
+    padding: 0.7rem 1rem;
+  }
+  
+  .explorer-positions-title {
+    font-size: 1.1rem;
+  }
+  
+  .explorer-address {
+    font-size: 0.75rem;
+  }
+}
+
+/* Explorer Container */
+.explorer-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.explorer-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.explorer-input {
+  flex: 1;
+}
+
+.explorer-button {
+  min-width: 120px;
+}
+
+.explorer-positions-title {
+  font-size: 1.5rem;
+}
+
+.explorer-address {
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+/* Très petits écrans */
+@media (max-width: 360px) {
+  .dashboard {
+    padding: 0.5rem;
+  }
+  
+  .tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .explorer-container {
+    max-width: 100%;
   }
 }

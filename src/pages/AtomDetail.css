@@ -545,7 +545,7 @@
 
 @media (max-width: 768px) {
   .atom-detail-page {
-    padding: 1rem;
+    padding: 1rem 0.75rem;
   }
 
   .detail-header {
@@ -573,5 +573,52 @@
   
   .detail-grid-2 {
     grid-template-columns: 1fr;
+  }
+  
+  .chart-header {
+    padding: 1.25rem 1.25rem 0;
+  }
+  
+  .period-selector-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .atom-detail-page {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .back-button {
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .detail-section {
+    padding: 1.25rem;
+  }
+  
+  .section-title {
+    font-size: 1.1rem;
+  }
+  
+  .chart-header {
+    padding: 1rem 1rem 0;
+    gap: 0.75rem;
+  }
+  
+  .period-selector-buttons {
+    gap: 0.35rem;
+    padding: 0.2rem;
+  }
+  
+  .period-btn {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
   }
 }

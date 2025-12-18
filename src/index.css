@@ -39,6 +39,12 @@ body {
   min-height: 100vh;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  overflow-x: hidden; /* Éviter le scroll horizontal */
+}
+
+/* Assurer que tous les conteneurs ne débordent pas */
+* {
+  max-width: 100%;
 }
 
 a {

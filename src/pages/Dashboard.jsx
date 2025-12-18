@@ -37,10 +37,19 @@ const Dashboard = () => {
     minSharePrice: '',
     maxSharePrice: '',
   });
+  
+  // États pour l'explorateur de wallet
+  const [explorerAddress, setExplorerAddress] = useState('');
+  const [explorerPositions, setExplorerPositions] = useState([]);
+  const [explorerLoading, setExplorerLoading] = useState(false);
+  const [explorerError, setExplorerError] = useState(null);
 
   useEffect(() => {
     if (activeTab === 'positions') {
       loadPositions();
+    } else if (activeTab === 'explorer') {
+      // Ne rien charger automatiquement pour l'explorer
+      setLoading(false);
     } else {
       loadAtoms();
     }
@@ -85,6 +94,36 @@ const Dashboard = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Valider une adresse Ethereum
+  const isValidAddress = (addr) => {
+    return /^0x[a-fA-F0-9]{40}$/.test(addr);
+  };
+
+  // Charger les positions d'une adresse explorée
+  const loadExplorerPositions = async () => {
+    if (!explorerAddress.trim()) {
+      setExplorerError(t('explorer.errorEmptyAddress'));
+      return;
+    }
+
+    if (!isValidAddress(explorerAddress)) {
+      setExplorerError(t('explorer.errorInvalidAddress'));
+      return;
+    }
+
+    try {
+      setExplorerLoading(true);
+      setExplorerError(null);
+      const data = await positionsService.getPositions(explorerAddress, 1000);
+      setExplorerPositions(data.positions || []);
+    } catch (err) {
+      setExplorerError(t('explorer.errorLoading'));
+      console.error(err);
+    } finally {
+      setExplorerLoading(false);
     }
   };
 
@@ -306,6 +345,12 @@ const Dashboard = () => {
                       👛 Mes positions
                     </button>
                   )}
+                  <button
+                    className={`tab ${activeTab === 'explorer' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('explorer')}
+                  >
+                    🔍 {t('nav.explorer')}
+                  </button>
                 </div>
                 
               </div>
@@ -345,6 +390,90 @@ const Dashboard = () => {
                     ))}
                   </div>
                 )}
+              </>
+            ) : activeTab === 'explorer' ? (
+              // Affichage de l'explorateur de wallet
+              <>
+                <div className="dashboard-stats">
+                  <div className="stats-header">
+                    <div className="stats-header-text">
+                      <h2 className="section-title">
+                        🔍 {t('explorer.title')}
+                      </h2>
+                      <p className="section-description">
+                        {t('explorer.description')}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="explorer-container">
+                  <div className="explorer-form">
+                    <input
+                      type="text"
+                      value={explorerAddress}
+                      onChange={(e) => {
+                        setExplorerAddress(e.target.value);
+                        setExplorerError(null);
+                      }}
+                      placeholder={t('explorer.placeholder')}
+                      className="search-input explorer-input"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          loadExplorerPositions();
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={loadExplorerPositions}
+                      disabled={explorerLoading}
+                      className="sync-button explorer-button"
+                    >
+                      {explorerLoading ? `⏳ ${t('common.loading')}` : `🔍 ${t('explorer.button')}`}
+                    </button>
+                  </div>
+                  {explorerError && (
+                    <p className="error-message">
+                      ⚠️ {explorerError}
+                    </p>
+                  )}
+                </div>
+
+                {explorerLoading ? (
+                  <div className="loading-container">
+                    <div className="loader"></div>
+                    <p>{t('explorer.loading')}</p>
+                  </div>
+                ) : explorerPositions.length > 0 ? (
+                  <>
+                    <div className="dashboard-stats">
+                      <div className="stats-header">
+                        <div className="stats-header-text">
+                          <h3 className="section-title explorer-positions-title">
+                            {t('explorer.positionsCount', { count: explorerPositions.length })}
+                          </h3>
+                          <p className="section-description explorer-address">
+                            {explorerAddress}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="atoms-grid">
+                      {explorerPositions.map((position) => (
+                        <PositionCard 
+                          key={position.position_id} 
+                          position={position} 
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : explorerAddress && !explorerError ? (
+                  <div className="empty-state">
+                    <p className="empty-message">
+                      {t('explorer.noPositions')}
+                    </p>
+                  </div>
+                ) : null}
               </>
             ) : (
               // Affichage des atoms (Top / Trending / Recherche)

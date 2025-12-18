@@ -90,10 +90,40 @@
 @media (max-width: 768px) {
   .search-bar {
     flex-direction: column;
+    margin-bottom: 2rem;
   }
 
   .search-button {
     width: 100%;
     padding: 1rem;
+  }
+  
+  .search-input {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-bar {
+    margin-bottom: 1.5rem;
+  }
+  
+  .search-input {
+    padding: 0.85rem 3rem 0.85rem 3rem;
+    font-size: 0.9rem;
+  }
+  
+  .search-icon {
+    left: 1rem;
+    font-size: 1rem;
+  }
+  
+  .clear-button {
+    right: 1rem;
+  }
+  
+  .search-button {
+    font-size: 0.9rem;
+    padding: 0.85rem;
   }
 }

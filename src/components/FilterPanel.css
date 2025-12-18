@@ -290,17 +290,69 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .filter-panel-container {
+    padding: 1rem;
+  }
+  
   .filter-controls {
     flex-direction: column;
     align-items: stretch;
   }
-
+  
+  .period-selector-filter,
   .limit-selector {
     justify-content: space-between;
+    width: 100%;
+  }
+  
+  .period-select,
+  .limit-select {
+    min-width: auto;
+    flex: 1;
   }
 
   .filter-row {
     grid-template-columns: 1fr;
+  }
+  
+  .filter-panel {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-panel-container {
+    padding: 0.75rem;
+  }
+  
+  .filter-controls {
+    gap: 0.75rem;
+  }
+  
+  .period-selector-filter label,
+  .limit-selector label {
+    font-size: 0.85rem;
+  }
+  
+  .period-select,
+  .limit-select {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.85rem;
+  }
+  
+  .filter-input {
+    padding: 0.55rem;
+    font-size: 0.85rem;
+  }
+  
+  .filter-actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+  
+  .reset-filters-btn {
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
   }
 }
 

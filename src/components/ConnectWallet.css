@@ -95,12 +95,42 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .connect-wallet {
+    width: 100%;
+  }
+  
+  .connect-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
   .wallet-info {
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
   
   .network-warning {
     font-size: 0.75rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .connect-button {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  
+  .wallet-address {
+    font-size: 0.85rem;
+  }
+  
+  .wallet-network {
+    font-size: 0.75rem;
+  }
+  
+  .wallet-info {
+    padding: 0.65rem 0.85rem;
   }
 }
